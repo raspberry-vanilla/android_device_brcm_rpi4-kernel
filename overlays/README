@@ -2777,18 +2777,6 @@ Params: speed                   Display SPI bus speed
         xohms                   Touchpanel sensitivity (X-plate resistance)
         swapxy                  Swap x and y axis
         backlight               Change backlight GPIO pin {e.g. 12, 18}
-        gpio_out_pin            GPIO for output (default "17")
-        gpio_in_pin             GPIO for input (default "18")
-        gpio_in_pull            Pull up/down/off on the input pin
-                                (default "down")
-        sense                   Override the IR receive auto-detection logic:
-                                 "0" = force active-high
-                                 "1" = force active-low
-                                 "-1" = use auto-detection
-                                (default "-1")
-        softcarrier             Turn the software carrier "on" or "off"
-                                (default "on")
-        invert                  "on" = invert the output pin (default "off")
         debug                   "on" = enable additional debug messages
                                 (default "off")
 
@@ -3060,9 +3048,9 @@ Params: addr                    I2C address of expander. Default 0x20.
         pca9574                 Select the NXP PCA9574 (8 bit)
         pca9575                 Select the NXP PCA9575 (16 bit)
         pca9698                 Select the NXP PCA9698 (40 bit)
-        pca16416                Select the NXP PCA16416 (16 bit)
-        pca16524                Select the NXP PCA16524 (24 bit)
-        pca19555a               Select the NXP PCA19555A (16 bit)
+        pcal6416                Select the NXP PCAL6416 (16 bit)
+        pcal6524                Select the NXP PCAL6524 (24 bit)
+        pcal9555a               Select the NXP PCAL9555A (16 bit)
         max7310                 Select the Maxim MAX7310 (8 bit)
         max7312                 Select the Maxim MAX7312 (16 bit)
         max7313                 Select the Maxim MAX7313 (16 bit)
@@ -4089,6 +4077,8 @@ Params: speed                   SPI bus speed (default 10000000)
         dc_pin                  GPIO pin for D/C (default 24)
         reset_pin               GPIO pin for RESET (default 25)
         height                  Display height (32 or 64; default 64)
+        inverted                Set this if display is inverted and mirrored.
+                                (default=not set)
 
 
 Name:   ssd1331-spi
