@@ -706,7 +706,8 @@ Params: swap_lr                 Reverse the channel allocation, which will also
                                 nothing on BCM2711 (default off)
         pins_12_13              Select GPIOs 12 & 13 (default)
         pins_18_19              Select GPIOs 18 & 19
-        pins_40_41              Select GPIOs 40 & 41
+        pins_40_41              Select GPIOs 40 & 41 (not available on CM4, used
+                                for other purposes)
         pins_40_45              Select GPIOs 40 & 45 (don't use on BCM2711 - the
                                 pins are on different controllers)
 
@@ -1959,13 +1960,15 @@ Params: abx80x                  Select one of the ABx80x family:
                                 "schottky" (ABx80x and RV1805 only)
 
         trickle-resistor-ohms   Resistor value for trickle charge (DS1339,
-                                ABx80x, RV1805, RV3028)
+                                ABx80x, BQ32000, RV1805, RV3028, RV3032)
+
+        trickle-voltage-mv      Charge pump voltage for trickle charge (RV3032)
 
         wakeup-source           Specify that the RTC can be used as a wakeup
                                 source
 
         backup-switchover-mode  Backup power supply switch mode. Must be 0 for
-                                off or 1 for Vdd < VBackup (RV3028 only)
+                                off or 1 for Vdd < VBackup (RV3028, RV3032)
 
 
 Name:   i2c-rtc-gpio
@@ -2029,13 +2032,15 @@ Params: abx80x                  Select one of the ABx80x family:
                                 "schottky" (ABx80x and RV1805 only)
 
         trickle-resistor-ohms   Resistor value for trickle charge (DS1339,
-                                ABx80x, RV1805, RV3028)
+                                ABx80x, BQ32000, RV1805, RV3028, RV3032)
+
+        trickle-voltage-mv      Charge pump voltage for trickle charge (RV3032)
 
         wakeup-source           Specify that the RTC can be used as a wakeup
                                 source
 
         backup-switchover-mode  Backup power supply switch mode. Must be 0 for
-                                off or 1 for Vdd < VBackup (RV3028 only)
+                                off or 1 for Vdd < VBackup (RV3028, RV3032)
 
         i2c_gpio_sda            GPIO used for I2C data (default "23")
 
@@ -2050,8 +2055,8 @@ Info:   Adds support for a number of I2C barometric pressure, temperature,
         light level and chemical sensors on i2c_arm
 Load:   dtoverlay=i2c-sensor,<param>=<val>
 Params: addr                    Set the address for the BH1750, BME280, BME680,
-                                BMP280, CCS811, DS1621, HDC100X, JC42, LM75,
-                                MCP980x, MPU6050, MPU9250, MS5637, MS5803,
+                                BMP280, BMP380, CCS811, DS1621, HDC100X, JC42,
+                                LM75, MCP980x, MPU6050, MPU9250, MS5637, MS5803,
                                 MS5805, MS5837, MS8607, SHT3x or TMP102
 
         aht10                   Select the Aosong AHT10 temperature and humidity
@@ -2071,6 +2076,9 @@ Params: addr                    Set the address for the BH1750, BME280, BME680,
         bmp180                  Select the Bosch Sensortronic BMP180
 
         bmp280                  Select the Bosch Sensortronic BMP280
+                                Valid addresses 0x76-0x77, default 0x76
+
+        bmp380                  Select the Bosch Sensortronic BMP380
                                 Valid addresses 0x76-0x77, default 0x76
 
         bno055                  Select the Bosch Sensortronic BNO055 IMU
@@ -4553,6 +4561,8 @@ Params: 2_8_inch                2.8" 480x640
         i2c1                    Use i2c-1 with jumper wires from GPIOs 2&3
         disable_touch           Disable the touch controller
         rotation                Set the panel orientation property
+        sizex                   Touchscreen size x
+        sizey                   Touchscreen size y
         invx                    Touchscreen inverted x axis
         invy                    Touchscreen inverted y axis
         swapxy                  Touchscreen swapped x y axis
