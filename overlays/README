@@ -207,7 +207,7 @@ Params:
                                 0 means never downshift (default 2). Pi3B+ only.
 
         eth_led0                Set mode of LED0 - amber on Pi3B+ (default "1"),
-                                green on Pi4 (default "0").
+                                green on Pi4/5 (default "0").
                                 The legal values are:
 
                                 Pi3B+
@@ -217,7 +217,7 @@ Params:
                                 4=link100/1000/activity  5=link10/1000/activity
                                 6=link10/100/activity    14=off    15=on
 
-                                Pi4
+                                Pi4/5
 
                                 0=Speed/Activity         1=Speed
                                 2=Flash activity         3=FDX
@@ -226,12 +226,37 @@ Params:
                                 8=Link                   9=Activity
 
         eth_led1                Set mode of LED1 - green on Pi3B+ (default "6"),
-                                amber on Pi4 (default "8"). See eth_led0 for
+                                amber on Pi4/5 (default "8"). See eth_led0 for
                                 legal values.
 
         eth_max_speed           Set the maximum speed a link is allowed
                                 to negotiate. Legal values are 10, 100 and
                                 1000 (default 1000). Pi3B+ only.
+
+        fan_temp0               Temperature threshold (in millicelcius) for
+                                1st cooling level (default 50000). Pi5 only.
+        fan_temp0_hyst          Temperature hysteresis (in millicelcius) for
+                                1st cooling level (default 5000). Pi5 only.
+        fan_temp0_speed         Fan PWM setting for 1st cooling level (0-255,
+                                default 75). Pi5 only.
+        fan_temp1               Temperature threshold (in millicelcius) for
+                                2nd cooling level (default 60000). Pi5 only.
+        fan_temp1_hyst          Temperature hysteresis (in millicelcius) for
+                                2nd cooling level (default 5000). Pi5 only.
+        fan_temp1_speed         Fan PWM setting for 2nd cooling level (0-255,
+                                default 125). Pi5 only.
+        fan_temp2               Temperature threshold (in millicelcius) for
+                                3rd cooling level (default 67500). Pi5 only.
+        fan_temp2_hyst          Temperature hysteresis (in millicelcius) for
+                                3rd cooling level (default 5000). Pi5 only.
+        fan_temp2_speed         Fan PWM setting for 3rd cooling level (0-255,
+                                default 175). Pi5 only.
+        fan_temp3               Temperature threshold (in millicelcius) for
+                                4th cooling level (default 75000). Pi5 only.
+        fan_temp3_hyst          Temperature hysteresis (in millicelcius) for
+                                4th cooling level (default 5000). Pi5 only.
+        fan_temp3_speed         Fan PWM setting for 4th cooling level (0-255,
+                                default 250). Pi5 only.
 
         hdmi                    Set to "off" to disable the HDMI interface
                                 (default "on")
@@ -1716,6 +1741,34 @@ Load:   dtoverlay=hifiberry-amp3
 Params: <None>
 
 
+Name:   hifiberry-amp4pro
+Info:   Configures the HifiBerry AMP4 Pro audio card
+Load:   dtoverlay=hifiberry-amp4pro,<param>=<val>
+Params: 24db_digital_gain       Allow gain to be applied via the TAS5756
+                                Digital volume control. Enable with
+                                "dtoverlay=hifiberry-amp4pro,24db_digital_gain"
+                                (The default behaviour is that the Digital
+                                volume control is limited to a maximum of
+                                0dB. ie. it can attenuate but not provide
+                                gain. For most users, this will be desired
+                                as it will prevent clipping. By appending
+                                the 24dB_digital_gain parameter, the Digital
+                                volume control will allow up to 24dB of
+                                gain. If this parameter is enabled, it is the
+                                responsibility of the user to ensure that
+                                the Digital volume control is set to a value
+                                that does not result in clipping/distortion!)
+        slave                   Force the amp into slave mode, using Pi as
+                                master for bit clock and frame clock.
+        leds_off                If set to 'true' the onboard indicator LEDs
+                                are switched off at all times.
+        auto_mute               If set to 'true' the amplifier is automatically
+                                muted when it is not playing.
+        mute_ext_ctl            The amplifier's HW mute control is enabled
+                                in ALSA mixer and set to <val>.
+                                Will be overwritten by ALSA user settings.
+
+
 Name:   hifiberry-dac
 Info:   Configures the HifiBerry DAC audio cards
 Load:   dtoverlay=hifiberry-dac
@@ -2084,7 +2137,13 @@ Params: abx80x                  Select one of the ABx80x family:
                                 source
 
         backup-switchover-mode  Backup power supply switch mode. Must be 0 for
-                                off or 1 for Vdd < VBackup (RV3028, RV3032)
+                                "Switchover disabled", 1 for "Direct Switching"
+                                (if Vdd < VBackup), 2 for "Standby
+                                Mode" (if Vdd < Vbackup,
+                                does not draw current) or 3 for
+                                "Level Switching" (if Vdd < Vbackup
+                                and Vdd < Vddsw and Vbackup > Vddsw)
+                                (RV3028, RV3032)
 
 
 Name:   i2c-rtc-gpio
@@ -2156,7 +2215,13 @@ Params: abx80x                  Select one of the ABx80x family:
                                 source
 
         backup-switchover-mode  Backup power supply switch mode. Must be 0 for
-                                off or 1 for Vdd < VBackup (RV3028, RV3032)
+                                "Switchover disabled", 1 for "Direct Switching"
+                                (if Vdd < VBackup), 2 for "Standby
+                                Mode" (if Vdd < Vbackup,
+                                does not draw current) or 3 for
+                                "Level Switching" (if Vdd < Vbackup
+                                and Vdd < Vddsw and Vbackup > Vddsw)
+                                (RV3028, RV3032)
 
         i2c_gpio_sda            GPIO used for I2C data (default "23")
 
@@ -3354,6 +3419,12 @@ Load:   dtoverlay=pcie-32bit-dma
 Params: <None>
 
 
+Name:   pcie-32bit-dma-pi5
+Info:   Force PCIe config to support 32bit DMA addresses at the expense of
+        having to bounce buffers (on the Pi 5).
+Load:   dtoverlay=pcie-32bit-dma-pi5
+Params: <None>
+
 [ The pcf2127-rtc overlay has been deleted. See i2c-rtc. ]
 
 
@@ -3464,8 +3535,14 @@ Params: speed                   Display SPI bus speed
 
 
 Name:   pisound
-Info:   Configures the Blokas Labs pisound card
+Info:   Configures the Blokas Labs Pisound card
 Load:   dtoverlay=pisound
+Params: <None>
+
+
+Name:   pisound-pi5
+Info:   Pi 5 specific overlay override for Blokas Labs Pisound card, see pisound
+Load:   dtoverlay=pisound-pi5
 Params: <None>
 
 
@@ -3480,6 +3557,10 @@ Params: speed                   Display SPI bus speed
 
         debug                   Debug output level {0-7}
 
+        drm                     Force the use of the mi0283qt DRM driver (by
+                                default the ili9340 framebuffer driver will
+                                be used in preference if available)
+
 
 Name:   pitft28-capacitive
 Info:   Adafruit PiTFT 2.8" capacitive touch screen
@@ -3491,6 +3572,10 @@ Params: speed                   Display SPI bus speed
         fps                     Delay between frame updates
 
         debug                   Debug output level {0-7}
+
+        drm                     Force the use of the mi0283qt DRM driver (by
+                                default the ili9340 framebuffer driver will
+                                be used in preference if available)
 
         touch-sizex             Touchscreen size x (default 240)
 
@@ -3518,6 +3603,12 @@ Params: speed                   Display SPI bus speed
                                 default the ili9340 framebuffer driver will
                                 be used in preference if available)
 
+        touch-invx              Touchscreen inverted x axis
+
+        touch-invy              Touchscreen inverted y axis
+
+        touch-swapxy            Touchscreen swapped x y axis
+
 
 Name:   pitft35-resistive
 Info:   Adafruit PiTFT 3.5" resistive touch screen
@@ -3533,6 +3624,12 @@ Params: speed                   Display SPI bus speed
         drm                     Force the use of the hx8357d DRM driver (by
                                 default the fb_hx8357d framebuffer driver will
                                 be used in preference if available)
+
+        touch-invx              Touchscreen inverted x axis
+
+        touch-invy              Touchscreen inverted y axis
+
+        touch-swapxy            Touchscreen swapped x y axis
 
 
 Name:   pps-gpio
