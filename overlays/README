@@ -2783,6 +2783,8 @@ Params: rotation                Mounting rotation of the camera sensor (0 or
                                 camera clamping I/Os such as XVS to 0V.
         sync-source             Configure as vsync source
         sync-sink               Configure as vsync sink
+        link-frequency          Allowable link frequency values to use in Hz:
+                                450000000 (default), 453000000, 456000000.
 
 
 Name:   imx462
@@ -2825,6 +2827,8 @@ Params: rotation                Mounting rotation of the camera sensor (0 or
                                 camera clamping I/Os such as XVS to 0V.
         sync-source             Configure as vsync source
         sync-sink               Configure as vsync sink
+        link-frequency          Allowable link frequency values to use in Hz:
+                                450000000 (default), 453000000, 456000000.
 
 
 Name:   imx500
@@ -3906,6 +3910,12 @@ Params: pin                     Output pin (default 18) - see table
         clock                   PWM clock frequency (informational)
 
 
+Name:   pwm-gpio
+Info:   Configures the software PWM GPIO driver
+Load:   dtoverlay=pwm-gpio,<param>=<val>
+Params: gpio                    Output pin (default 4)
+
+
 Name:   pwm-ir-tx
 Info:   Use GPIO pin as pwm-assisted infrared transmitter output.
         This is an alternative to "gpio-ir-tx". pwm-ir-tx makes use
@@ -3917,6 +3927,14 @@ Load:   dtoverlay=pwm-ir-tx,<param>=<val>
 Params: gpio_pin                Output GPIO (default 18)
 
         func                    Pin function (default 2 = Alt5)
+
+
+Name:   pwm-pio
+Info:   Configures a GPIO pin as PIO-assisted PWM output. Unlike hardware PWM,
+        this can be used on any RP1 GPIO in bank 0 (0-27). Up to 4 are
+        supported, assuming nothing else is using PIO. Pi 5 only.
+Load:   dtoverlay=pwm-pio,<param>=<val>
+Params: gpio                    Output GPIO (0-27, default 4)
 
 
 Name:   pwm1
