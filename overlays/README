@@ -1081,11 +1081,12 @@ Params: cma-512                 CMA is 512MB (needs 1GB)
 
 Name:   crystalfontz-cfa050_pi_m
 Info:   Configures the Crystalfontz CFA050-PI-M series of Raspberry Pi CM4
-        based modules using the CFA7201280A0_050Tx 7" TFT LCD displays,
+        and CM5 based modules using the CFA7201280A0_050Tx 7" TFT LCD displays,
         with or without capacitive touch screen.
         Requires use of vc4-kms-v3d.
 Load:   dtoverlay=crystalfontz-cfa050_pi_m,<param>=<val>
 Params: captouch                Enable capacitive touch display
+        cm5                     Enable support for the Raspberry Pi CM5
 
 
 Name:   cutiepi-panel
@@ -1246,10 +1247,13 @@ Params: draws_adc_ch4_gain      Sets the full scale resolution of the ADCs
 
 
 Name:   dwc-otg
-Info:   Selects the dwc_otg USB controller driver which has fiq support. This
-        is the default on all except the Pi Zero which defaults to dwc2.
-Load:   dtoverlay=dwc-otg
-Params: <None>
+Info:   The dwc-otg has been deprecated.
+Load:   <Deprecated>
+
+
+Name:   dwc-otg-deprecated
+Info:   The dwc-otg has been deprecated.
+Load:   <Deprecated>
 
 
 Name:   dwc2
@@ -1588,6 +1592,7 @@ Params: gpio                    GPIO pin to trigger on (default 3)
                                 (GPIO3) has an external pullup
         label                   Set a label for the key
         keycode                 Set the key code for the button
+        autorepeat              Set the key to autorepeat
 
 
 
@@ -2257,6 +2262,8 @@ Params: abx80x                  Select one of the ABx80x family:
 
         m41t62                  Select the M41T62 device
 
+        m41t80                  Select the M41T80 device
+
         mcp7940x                Select the MCP7940x device
 
         mcp7941x                Select the MCP7941x device
@@ -2339,6 +2346,8 @@ Params: abx80x                  Select one of the ABx80x family:
         ds3231                  Select the DS3231 device
 
         m41t62                  Select the M41T62 device
+
+        m41t80                  Select the M41T80 device
 
         mcp7940x                Select the MCP7940x device
 
@@ -2776,6 +2785,29 @@ Params: rotation                Mounting rotation of the camera sensor (0 or
         vcm                     Configure a VCM focus drive on the sensor.
         4lane                   Enable 4 CSI2 lanes. This requires a Compute
                                 Module (1, 3, 4, or 5) or Pi 5.
+
+
+Name:   imx283
+Info:   Sony IMX283 camera module.
+        Uses Unicam 1, which is the standard camera connector on most Pi
+        variants. This sensor only supports 4 lane operation and therefore
+        requires a Compute Module (1, 3, 4, or 5) or Pi 5.
+Load:   dtoverlay=imx283,<param>=<val>
+Params: rotation                Mounting rotation of the camera sensor (0 or
+                                180, default 180)
+        orientation             Sensor orientation (0 = front, 1 = rear,
+                                2 = external, default external)
+        clock-frequency         Sets the clock frequency to match that used on
+                                the board.
+                                Known tested values include 24MHz (the default)
+                                and 12MHz.
+        link-frequency          Allowable link frequency values to use in Hz:
+                                720000000 (default), 360000000.
+        media-controller        Configure use of Media Controller API for
+                                configuring the sensor (default on)
+        cam0                    Adopt the default configuration for CAM0 on a
+                                Compute Module or Pi5 (CSI0, i2c_vc, and
+                                cam0_reg).
 
 
 Name:   imx290
@@ -4025,6 +4057,14 @@ Params: speed                   Display SPI bus speed
         touch-invy              Touchscreen inverted y axis
 
         touch-swapxy            Touchscreen swapped x y axis
+
+
+Name:   pivision
+Info:   Overlay to enable the SECO Pi Vision 10.1 HMI hardware for Compute
+        Module 5. Will be loaded automatically by up-to-date firmware via
+        EEPROM detection.
+Load:   dtoverlay=pivision
+Params: <None>
 
 
 Name:   pps-gpio
@@ -5653,14 +5693,22 @@ Name:   vc4-kms-dsi-waveshare-panel-v2
 Info:   Enable the Waveshare DSI-TOUCH series screen
         Requires vc4-kms-v3d to be loaded.
 Load:   dtoverlay=vc4-kms-dsi-waveshare-panel-v2,<param>
-Params: 5_0_inch_a              5.0" 720x1280 2lane
+Params: 3_4_inch_c              3.4" 800x800 2lane
+        4_0_inch_c              4.0" 720x720 2lane
+        5_0_inch_a              5.0" 720x1280 2lane
         5_5_inch_a              5.5" 720x1280 2lane
         7_0_inch_a              7.0" A 720x1280 2lane
         7_0_inch_b              7.0" B 720x1280 2lane
         8_0_inch_a              8.0" 800x1280 2lane
         8_0_inch_a_4lane        8.0" 800x1280 4lane
+        8_8_inch_a              8.8" 480x1920 2lane
+        9_0_inch_b              9.0" 720x1280 2lane
+        9_0_inch_b_4lane        9.0" 720x1280 4lane
         10_1_inch_a             10.1" 800x1280 2lane
         10_1_inch_a_4lane       10.1" 800x1280 4lane
+        10_1_inch_b             10.1" 720x1280 2lane
+        10_1_inch_b_4lane       10.1" 720x1280 4lane
+        12_3_inch_a_4lane       12.3" 720x1920 4lane
         disable_touch           Disable the touch controller
         invx                    Touchscreen inverted x axis
         invy                    Touchscreen inverted y axis
