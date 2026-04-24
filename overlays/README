@@ -234,7 +234,7 @@ Params:
 
         eee                     Enable Energy Efficient Ethernet support for
                                 compatible devices (default "on"). See also
-                                "tx_lpi_timer". Pi3B+, Pi4 and CM4 only.
+                                "tx_lpi_timer". Pi3B+, Pi4, CM4, Pi5 and CM5.
 
         enable_eeprom           Set to "on" to enable the onboard bootloader
                                 EEPROM by driving GPIO 57 low
@@ -2444,7 +2444,8 @@ Params: addr                    Set the address for the AD799X, ADS7828,
                                 BME280, BME680, BMP280, BMP380, BMP58x, CCS811,
                                 DS1621, HDC100X, HDC3020, JC42, LM75, MCP980x,
                                 MPU6050, MPU9250, MS5637, MS5803, MS5805,
-                                MS5837, MS8607, SHT3x, TMP102 or VEML6030.
+                                MS5837, MS8607, SHT3x, STS3X, TMP102 or
+                                VEML6030.
 
         i2c-bus                 Supports all the standard I2C bus selection
                                 parameters - see "dtoverlay -h i2c-bus"
@@ -2554,8 +2555,8 @@ Params: addr                    Set the address for the AD799X, ADS7828,
                                 ti,shunt-gain for configuration
 
         int_pin                 Set the GPIO to use for interrupts (as73211,
-                                as7331, hdc3020, hts221, max30102, mpu6050 and
-                                mpu9250 only)
+                                as7331, hdc3020, hts221, max30102, mpu6050,
+                                mpu9250, veml6030, veml6035 only)
 
         jc42                    Select any of the many JEDEC JC42.4-compliant
                                 temperature sensors, including:
@@ -2620,6 +2621,9 @@ Params: addr                    Set the address for the AD799X, ADS7828,
 
         scd4x                   Select the Sensirion SCD40/41 CO2 sensors.
 
+        sgp30                   Select the Sensirion SGP30 VOC sensor.
+                                Fixed address 0x58.
+
         sht3x                   Select the Sensirion SHT3x temperature and
                                 humidity sensors. Valid addresses 0x44-0x45,
                                 default 0x44
@@ -2627,6 +2631,9 @@ Params: addr                    Set the address for the AD799X, ADS7828,
         sht4x                   Select the Sensirion SHT4x temperature and
                                 humidity sensors. Valid addresses 0x44-0x45,
                                 default 0x44
+
+        sht85                   Select the Sensirion SHT85 temperature and
+                                humidity sensors. Fixed address 0x44.
 
         shtc3                   Select the Sensirion SHTC3 temperature and
                                 humidity sensors.
@@ -2637,8 +2644,8 @@ Params: addr                    Set the address for the AD799X, ADS7828,
         sps30                   Select the Sensirion SPS30 particulate matter
                                 sensor. Fixed address 0x69.
 
-        sgp30                   Select the Sensirion SGP30 VOC sensor.
-                                Fixed address 0x58.
+        sts3x                   Select the Sensirion STS3X temperature sensors.
+                                Valid addresses 0x4a-0x4b, default 0x4a
 
         tcs3472                 Select the AMS TAOS TCS3472 family of RGBW light
                                 sensors.
@@ -2653,7 +2660,13 @@ Params: addr                    Set the address for the AD799X, ADS7828,
         tsl4531                 Select the AMS TSL4531 digital ambient light
                                 sensor
 
+        veml3235                Select the Vishay VEML3235 ambient light sensor
+
         veml6030                Select the Vishay VEML6030 ambient light sensor
+
+        veml6035                Select the Vishay VEML6035 ambient light sensor
+
+        veml7700                Select the Vishay VEML7700 ambient light sensor
 
         veml6040                Select the Vishay VEML6040 RGBW light sensor
 
@@ -3857,10 +3870,19 @@ Params: addr                    I2C address of expander. Default
                                 depends on model selected.
         i2c-bus                 Supports all the standard I2C bus selection
                                 parameters - see "dtoverlay -h i2c-bus"
+        max7328                 Select the Maxim MAX7328 (8 bit)
+        max7329                 Select the Maxim MAX7329 (8 bit)
         pcf8574                 Select the NXP PCF8574 (8 bit)
         pcf8574a                Select the NXP PCF8574A (8 bit)
         pcf8575                 Select the NXP PCF8575 (16 bit)
         pca8574                 Select the NXP PCA8574 (8 bit)
+        pca8575                 Select the NXP PCA8575 (16 bit)
+        pca9670                 Select the NXP PCA9670 (8 bit)
+        pca9671                 Select the NXP PCA9671 (16 bit)
+        pca9672                 Select the NXP PCA9672 (8 bit)
+        pca9673                 Select the NXP PCA9673 (16 bit)
+        pca9674                 Select the NXP PCA9674 (8 bit)
+        pca9675                 Select the NXP PCA9675 (16 bit)
 
 
 Name:   pcie-32bit-dma
@@ -6018,6 +6040,66 @@ Load:   dtoverlay=vc4-kms-vga666,<param>
 Params: ddc                     Enables GPIOs 0&1 as the I2C to read the EDID
                                 from the display. NB These are NOT 5V tolerant
                                 GPIOs, therefore level shifters are required.
+
+
+Name:   vd55g1
+Info:   ST VD55G1 camera module.
+        Uses Unicam 1, which is the standard camera connector on most Pi
+        variants.
+Load:   dtoverlay=vd55g1,<param>=<val>
+Params: rotation                Mounting rotation of the camera sensor (0 or
+                                180, default 0)
+        orientation             Sensor orientation (0 = front, 1 = rear,
+                                2 = external, default external)
+        media-controller        Configure use of Media Controller API for
+                                configuring the sensor (default on)
+        cam0                    Adopt the default configuration for CAM0 on a
+                                Compute Module (CSI0, i2c_vc, and cam0_reg).
+
+
+Name:   vd56g3
+Info:   ST VD56G3 camera module.
+        Uses Unicam 1, which is the standard camera connector on most Pi
+        variants.
+Load:   dtoverlay=vd56g3,<param>=<val>
+Params: rotation                Mounting rotation of the camera sensor (0 or
+                                180, default 0)
+        orientation             Sensor orientation (0 = front, 1 = rear,
+                                2 = external, default external)
+        media-controller        Configure use of Media Controller API for
+                                configuring the sensor (default on)
+        cam0                    Adopt the default configuration for CAM0 on a
+                                Compute Module (CSI0, i2c_vc, and cam0_reg).
+
+
+Name:   vd65g4
+Info:   ST VD65G4 camera module.
+        Uses Unicam 1, which is the standard camera connector on most Pi
+        variants.
+Load:   dtoverlay=vd65g4,<param>=<val>
+Params: rotation                Mounting rotation of the camera sensor (0 or
+                                180, default 0)
+        orientation             Sensor orientation (0 = front, 1 = rear,
+                                2 = external, default external)
+        media-controller        Configure use of Media Controller API for
+                                configuring the sensor (default on)
+        cam0                    Adopt the default configuration for CAM0 on a
+                                Compute Module (CSI0, i2c_vc, and cam0_reg).
+
+
+Name:   vd66gy
+Info:   ST VD66GY camera module.
+        Uses Unicam 1, which is the standard camera connector on most Pi
+        variants.
+Load:   dtoverlay=vd66gy,<param>=<val>
+Params: rotation                Mounting rotation of the camera sensor (0 or
+                                180, default 0)
+        orientation             Sensor orientation (0 = front, 1 = rear,
+                                2 = external, default external)
+        media-controller        Configure use of Media Controller API for
+                                configuring the sensor (default on)
+        cam0                    Adopt the default configuration for CAM0 on a
+                                Compute Module (CSI0, i2c_vc, and cam0_reg).
 
 
 Name:   vec-gpio-pi5
