@@ -1253,6 +1253,10 @@ Params: draws_adc_ch4_gain      Sets the full scale resolution of the ADCs
         alsaname                Name of the ALSA audio device (default "draws")
 
 
+Name:   draws-pi5
+Info:   See draws (this is the Pi 5 version)
+
+
 Name:   dwc-otg
 Info:   The dwc-otg has been deprecated.
 Load:   <Deprecated>
@@ -1272,6 +1276,59 @@ Params: dr_mode                 Dual role mode: "host", "peripheral" or "otg"
 
         g-np-tx-fifo-size       Size of non-periodic tx fifo size in gadget
                                 mode
+
+
+Name:   ed-ipc
+Info:   Configures the EDATEC IPC/EXP series hardware peripherals.
+        This overlay provides support for PCA9535 GPIO expanders on
+        the EDATEC industrial PC carrier boards, including interrupt
+        handling, GPIO line names, and optional secondary expander
+        on i2c_arm.
+Load:   dtoverlay=ed-ipc,<param>=<val>
+Params: addr                    I2C address for primary PCA9535 GPIO expander
+                                (default 0x20)
+
+        exp_addr                I2C address for secondary PCA9535 GPIO
+                                expander on i2c_arm (default 0x27)
+
+        ipc3100                 Enable configuration for IPC3100 board
+                                (CM5, i2c_csi_dsi0, PCA int GPIO6)
+
+        ipc2100                 Enable configuration for IPC2100 board
+                                (CM4, i2c_csi_dsi, PCA int GPIO6)
+
+        ipc2210                 Enable configuration for IPC2210 board
+                                (CM4, i2c_csi_dsi, PCA int GPIO6)
+
+        ipc3210                 Enable configuration for IPC3210 board
+                                (CM5, i2c_csi_dsi0, PCA int GPIO6)
+
+        ipc1200                 Enable configuration for IPC1200 board
+                                (CM4, i2c_csi_dsi, PCA int GPIO15)
+
+        ipc3300                 Enable configuration for IPC3300 board
+                                (CM5, i2c_arm, PCA int GPIO38)
+
+        ipc2300                 Enable configuration for IPC2300 board
+                                (CM4, i2c_arm, PCA int GPIO44)
+
+        plc2010                 Enable configuration for PLC2010 board
+                                (i2c_arm, PCA int GPIO7, addr 0x21)
+
+        exp8x8y                 Enable 8-input/8-output expansion module
+                                (CM5, i2c_arm)
+
+        exp4x4y                 Enable 4-input/4-output expansion module
+                                (CM5, i2c_arm, exp at addr 0x21)
+
+        ipc3600                 Enable combined configuration for IPC3600
+                                (IPC3100 + exp8x8y)
+
+        ipc2600                 Enable combined configuration for IPC2600
+                                (IPC2100 + exp8x8y)
+
+        ipc1220                 Enable combined configuration for IPC1220
+                                (IPC1200 + exp4x4y)
 
 
 [ The ds1307-rtc overlay has been deleted. See i2c-rtc. ]
@@ -2070,14 +2127,23 @@ Params: <None>
 
 Name:   hifiberry-studio-dac8x
 Info:   Configures the HifiBerry Studio DAC8x audio card
-Load:   dtoverlay=hifiberry-studio-dac8x
-Params: <None>
+Load:   dtoverlay=hifiberry-studio-dac8x,<param>=<val>
+Params: no_controls             Do not register the ALSA controls for
+                                this card
 
 
 Name:   hifiberry-studio-dac8x-pro
 Info:   Configures the HifiBerry Studio DAC8x PRO audio card
-Load:   dtoverlay=hifiberry-studio-dac8x-pro
-Params: <None>
+Load:   dtoverlay=hifiberry-studio-dac8x-pro,<param>=<val>
+Params: no_controls             Do not register the ALSA controls for
+                                this card
+
+
+Name:   hifiberry-studio-digi
+Info:   Configures the HifiBerry Studio Digi/AES audio card
+Load:   dtoverlay=hifiberry-studio-digi,<param>=<val>
+Params: no_controls             Do not register the ALSA controls for
+                                this card
 
 
 Name:   highperi
@@ -2974,6 +3040,23 @@ Params: orientation             Sensor orientation (0 = front, 1 = rear,
                                 configuring the sensor (default on)
         link-frequency          Allowable link frequency values to use in Hz:
                                 594000000 (default), 445500000.
+        cam0                    Adopt the default configuration for CAM0 on a
+                                Compute Module (CSI0, i2c_vc, and cam0_reg).
+        4lane                   Enable 4 CSI2 lanes. This requires a Compute
+                                Module (1, 3, 4, or 5) or Pi 5.
+
+
+Name:   imx355
+Info:   Sony IMX355 camera module.
+        Uses Unicam 1, which is the standard camera connector on most Pi
+        variants.
+Load:   dtoverlay=imx355,<param>
+Params: orientation             Sensor orientation (0 = front, 1 = rear,
+                                2 = external, default external)
+        rotation                Mounting rotation of the camera sensor (0 or
+                                180, default 0)
+        media-controller        Configure use of Media Controller API for
+                                configuring the sensor (default on)
         cam0                    Adopt the default configuration for CAM0 on a
                                 Compute Module (CSI0, i2c_vc, and cam0_reg).
         4lane                   Enable 4 CSI2 lanes. This requires a Compute
@@ -4740,6 +4823,11 @@ Params: overclock_50            Clock (in MHz) to use when the MMC framework
 
         debug                   Enable debug output (default off)
 
+        gpios_22_27             Route SD0 to GPIO 22-27 (CLK, CMD, DAT0-3)
+                                for use with a secondary SD card slot on
+                                custom carrier boards (e.g. CM4 baseboard).
+                                Applies ALT0 function and appropriate pulls.
+
 
 Name:   sdio
 Info:   Selects the bcm2835-sdhost SD/MMC driver, optionally with overclock,
@@ -4823,6 +4911,12 @@ Load:   dtoverlay=si446x-spi0,<param>=<val>
 Params: speed                   SPI bus speed (default 4000000)
         int_pin                 GPIO pin for interrupts (default 17)
         reset_pin               GPIO pin for RESET (default 27)
+
+
+Name:   sixfab_m1m
+Info:   Overlay for the Sixfab M1M PCIe Gen3 AI HAT+
+Load:   dtoverlay=sixfab_m1m
+Params: <None>
 
 
 Name:   smi
@@ -5792,6 +5886,29 @@ Params: sizex                   Touchscreen size x (default 800)
         disable_touch           Disables the touch screen overlay driver
         dsi0                    Use DSI0 and i2c_csi_dsi0 (rather than
                                 the default DSI1 and i2c_csi_dsi).
+
+
+Name:   vc4-kms-dsi-edatec-panel-070c
+Info:   Enable the edatec DSI 7" screen.
+        support ed-dispr-070c.
+        support ed-dispr5-070c.
+        support ed-dispr4-070c.
+Load:   dtoverlay=vc4-kms-dsi-edatec-panel-070c,<param>=<val>
+Params: interrupt               GPIO pin for interrupt signal(default 16)
+        i2c1                    Use i2c-1
+        i2c4                    Use i2c-4 (specialized for CM5)
+
+
+Name:   vc4-kms-dsi-edatec-panel-101c
+Info:   Enable the edatec DSI 10" screen.
+        support ed-dispr-101c.
+        support ed-dispr5-101c.
+        support ed-dispr4-101c.
+Load:   dtoverlay=vc4-kms-dsi-edatec-panel-101c,<param>=<val>
+Params: rotation                Display rotation {0,90,180,270} (default 270)
+        interrupt               GPIO pin for interrupt signal(default 16)
+        i2c1                    Use i2c-1
+        i2c4                    Use i2c-4 (specialized for CM5)
 
 
 Name:   vc4-kms-dsi-generic
